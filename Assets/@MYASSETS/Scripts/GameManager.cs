@@ -26,4 +26,9 @@ public class GameManager : MonoBehaviour
 
     //Booleano para saber si el juego ha sido empezado
     public bool juegoEmpezado { get; set; }
+
+    private void Start()
+    {
+        Screen.SetResolution(540, 960, false);
+    }
 }

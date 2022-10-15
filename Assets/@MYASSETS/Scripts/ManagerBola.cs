@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ManagerBola : MonoBehaviour
 {
-    //Comprueba que solo existe una instancia de este GameManager
+    //Comprueba que solo existe una instancia de este Manager
     #region Singleton
 
     private static ManagerBola _instancia;
