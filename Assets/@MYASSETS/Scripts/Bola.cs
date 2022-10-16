@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Bola : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static Action<Bola> OnBallDeath;
+    public void Muere()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        OnBallDeath?.Invoke(this);
+        Destroy(gameObject, 1);
     }
 }

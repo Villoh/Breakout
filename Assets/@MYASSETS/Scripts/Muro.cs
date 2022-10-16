@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
@@ -13,7 +10,7 @@ public class Muro : MonoBehaviour
 
     public ParticleSystem efectoDestruccion; //Particulas que apareceran con la destruccion del muro
 
-    //public static event Action<Muro> OnMuroDestruccion;
+    public static event Action<Muro> OnBrickDestruccion;
 
     private void Awake()
     {
@@ -36,7 +33,8 @@ public class Muro : MonoBehaviour
         //Comprueba que los golpes que puede recibir son iguales o menores que 0
         if (this.golpes <= 0)
         {
-            //OnMuroDestruccion?.Invoke(this);
+            ManagerMuros.instancia.murosRestantes.Remove(this);
+            OnBrickDestruccion?.Invoke(this);
             SpawnEefectoDestruccion();
             Destroy(this.gameObject); //Destruye el muro
         }
@@ -64,6 +62,10 @@ public class Muro : MonoBehaviour
         Destroy(clonEfectoDestruccion, efectoDestruccion.main.startLifetime.constant); //Destruye el sistema de particulas, el tiempo es asignado en las propiedades de este.
     }
 
+    /**
+     * private void Init()
+     * Inicializa el muro con unos atributos pasados como parametro
+     */
     public void Init(Transform contenedorTransform, Sprite sprite, Color color, int golpes)
     {
         this.transform.SetParent(contenedorTransform);

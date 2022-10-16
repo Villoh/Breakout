@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditorInternal;
+using System.Linq;
 using UnityEngine;
 
 public class ManagerMuros : MonoBehaviour
@@ -53,7 +49,6 @@ public class ManagerMuros : MonoBehaviour
     private void Start()
     {
         this.contenedorMuros = new GameObject("ContenedorMuros"); //Inicializa el objeto padre vacio donde se almacenaran los muros
-        this.murosRestantes = new List<Muro>();
         this.datosNiveles = this.CargaNiveles();
         this.GenerarMuros();
     }
@@ -64,6 +59,7 @@ public class ManagerMuros : MonoBehaviour
      */
     private void GenerarMuros()
     {
+        this.murosRestantes = new List<Muro>();
         int[,] datosNivelActual = this.datosNiveles[this.NivelActual]; //Carga los datos del nivel en una variable local
         float spawnActualX = posicionInicalSpawnMuroX; //Posicion del muro en X
         float spawnActualY = posicionInicalSpawnMuroY; //Posicion del muro en Y
@@ -139,5 +135,38 @@ public class ManagerMuros : MonoBehaviour
             }
         }
         return niveles;
+    }
+
+    public void CargarNivel(int nivel)
+    {
+        this.NivelActual = nivel;
+        this.LimpiarMurosRestantes();
+        this.GenerarMuros();
+    }
+
+    /**
+     * private void LimpiarMurosRestantes()
+     * Elimina los muros restantes de la escena
+     */
+    private void LimpiarMurosRestantes()
+    {
+        foreach (Muro muro in this.murosRestantes.ToList())
+        {
+            Destroy(muro.gameObject);
+        }
+    }
+
+    public void CargaSiguienteNivel()
+    {
+        this.NivelActual++;
+
+        if (this.NivelActual >= this.datosNiveles.Count)
+        {
+            GameManager.instancia.Victoria();
+        }
+        else
+        {
+            this.CargarNivel(this.NivelActual);
+        }
     }
 }

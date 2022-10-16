@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ManagerBola : MonoBehaviour
@@ -59,6 +59,10 @@ public class ManagerBola : MonoBehaviour
         }
     }
 
+    /**
+     * private void InicializarBola()
+     * Inicializa la bola
+     */
     private void InicializarBola()
     {
         Vector3 posicionRaqueta = Raqueta.instancia.transform.position; //Posicion de la Raqueta
@@ -70,5 +74,18 @@ public class ManagerBola : MonoBehaviour
         { 
             bolaInicial
         };
+    }
+
+    /**
+     * private void ResetBolas()
+     * Destruye las bolas de la escena.
+     */
+    public void ResetBolas()
+    {
+        foreach (var bola in this.bolas.ToList())
+        {
+            Destroy(bola.gameObject);
+        }
+        InicializarBola();
     }
 }
