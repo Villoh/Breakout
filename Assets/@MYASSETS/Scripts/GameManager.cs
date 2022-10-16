@@ -1,10 +1,5 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.PackageManager;
-using UnityEditor.SearchService;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,6 +38,8 @@ public class GameManager : MonoBehaviour
     //Booleano para saber si el juego ha sido empezado
     public bool juegoEmpezado { get; set; }
 
+    public static event Action<int> OnLiveLost;
+
     private void Start()
     {
         this.Vidas = this.vidasDisponibles;
@@ -70,6 +67,7 @@ public class GameManager : MonoBehaviour
         if (inputJugador.text != "")
         {
             gameOverScreen.transform.GetChild(0).gameObject.SetActive(false);
+            UIManager.instancia.ActualizaFicheroRecord();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         else
@@ -83,6 +81,7 @@ public class GameManager : MonoBehaviour
         if (inputJugador.text != "")
         {
             gameOverScreen.transform.GetChild(0).gameObject.SetActive(false);
+            UIManager.instancia.ActualizaFicheroRecord();
             Application.Quit();
         }
         else
@@ -107,6 +106,7 @@ public class GameManager : MonoBehaviour
             }
             else 
             {
+                OnLiveLost?.Invoke(this.Vidas);
                 ManagerBola.instancia.ResetBolas();
                 juegoEmpezado = false;
                 ManagerMuros.instancia.CargarNivel(ManagerMuros.instancia.NivelActual);

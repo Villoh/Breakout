@@ -11,6 +11,8 @@ public class ManagerMuros : MonoBehaviour
     private static ManagerMuros _instancia;
     public static ManagerMuros instancia => _instancia;
 
+    public static event Action OnLevelLoaded;
+
     private void Awake()
     {
         if (_instancia != null)
@@ -94,6 +96,7 @@ public class ManagerMuros : MonoBehaviour
         }
 
         this.numInicialMuros = this.murosRestantes.Count;
+        OnLevelLoaded?.Invoke();
     }
 
     /**
