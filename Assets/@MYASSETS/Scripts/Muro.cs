@@ -15,11 +15,11 @@ public class Muro : MonoBehaviour
 
     //public static event Action<Muro> OnMuroDestruccion;
 
-    public void Start() 
-    { 
+    private void Awake()
+    {
         this.sr = GetComponent<SpriteRenderer>(); //SpriteRender del muro
-        this.sr.sprite = ManagerMuros.instancia.sprites[this.golpes - 1];
     }
+
     private void OnCollisionEnter2D (Collision2D collision)
     {
         Bola bola = collision.gameObject.GetComponent<Bola>(); //Obtiene la el gameObject de la bola que ha colisionado
@@ -62,5 +62,13 @@ public class Muro : MonoBehaviour
         MainModule mm = clonEfectoDestruccion.GetComponent<ParticleSystem>().main;
         mm.startColor = this.sr.color; //Cambia el color del sistema de particulas por el color que tiene SpriteRenderer del muro.
         Destroy(clonEfectoDestruccion, efectoDestruccion.main.startLifetime.constant); //Destruye el sistema de particulas, el tiempo es asignado en las propiedades de este.
+    }
+
+    public void Init(Transform contenedorTransform, Sprite sprite, Color color, int golpes)
+    {
+        this.transform.SetParent(contenedorTransform);
+        this.sr.sprite = sprite;
+        this.sr.color = color;
+        this.golpes = golpes;
     }
 }
