@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
 public class Muro : MonoBehaviour
 {
     private SpriteRenderer sr;
+
+    public int tipoMuroPuntuacion = 0;
 
     public int golpes = 1; //Variable publica con los golpes que va a poder recibir cada muro
 
@@ -17,9 +20,27 @@ public class Muro : MonoBehaviour
         this.sr = GetComponent<SpriteRenderer>(); //SpriteRender del muro
     }
 
-    private void OnCollisionEnter2D (Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         Bola bola = collision.gameObject.GetComponent<Bola>(); //Obtiene la el gameObject de la bola que ha colisionado
+        bola.soundMuro.Play();
+        if (ManagerMuros.instancia.murosRestantes.Count <= 1)
+        {
+            StartCoroutine(uúltimoMuro(bola));
+        }
+        else 
+        {
+            AplicarLogicaColision(bola);
+        }
+    }
+
+    IEnumerator uúltimoMuro(Bola bola)
+    {
+        bola.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+        bola.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+        this.GetComponent<SpriteRenderer>().sprite = null;
+        SpawnEefectoDestruccion();
+        yield return new WaitForSeconds(0.7F);
         AplicarLogicaColision(bola);
     }
 
@@ -33,10 +54,13 @@ public class Muro : MonoBehaviour
         //Comprueba que los golpes que puede recibir son iguales o menores que 0
         if (this.golpes <= 0)
         {
+            if (ManagerMuros.instancia.murosRestantes.Count > 1)
+            {
+                SpawnEefectoDestruccion();
+            }
             ManagerMuros.instancia.murosRestantes.Remove(this);
             OnBrickDestruccion?.Invoke(this);
-            SpawnEefectoDestruccion();
-            Destroy(this.gameObject); //Destruye el muro
+            Destroy(this.gameObject);
         }
         else 
         {
@@ -72,5 +96,6 @@ public class Muro : MonoBehaviour
         this.sr.sprite = sprite;
         this.sr.color = color;
         this.golpes = golpes;
+        this.tipoMuroPuntuacion = golpes;
     }
 }

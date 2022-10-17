@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     public TMP_InputField jugador;
 
     public int puntuacion { get; set; }
+    public int puntuacionResidual { get; set; }
 
 
     private void Start()
@@ -44,17 +45,18 @@ public class UIManager : MonoBehaviour
 
     private void OnLiveLost(int vidasDisponibles)
     {
-        textoVidas.text = $"VIDAS: {vidasDisponibles}";
+        textoVidas.text = $"VIDAS: {vidasDisponibles}";    
     }
 
     private void OnBrickDestruccion(Muro obj)
     {
         ActualizaTextoMurosRestantes();
-        ActualizaTextoPuntuacion(10);
+        ActualizaTextoPuntuacion((10*obj.tipoMuroPuntuacion));
     }
 
     private void OnLevelLoaded()
     {
+        UIManager.instancia.puntuacionResidual = 0;
         ActualizaTextoMurosRestantes();
         ActualizaTextoPuntuacion(0);
     }
@@ -62,6 +64,7 @@ public class UIManager : MonoBehaviour
     private void ActualizaTextoPuntuacion(int incremento)
     {
         this.puntuacion += incremento;
+        this.puntuacionResidual += incremento;
         string puntuacionString = this.puntuacion.ToString().PadLeft(5, '0');
         textoPutuacion.text = $@"PUNTOS:
 {puntuacionString}";

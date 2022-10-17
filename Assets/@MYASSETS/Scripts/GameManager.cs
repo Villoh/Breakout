@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,8 +53,6 @@ public class GameManager : MonoBehaviour
     {
         if (ManagerMuros.instancia.murosRestantes.Count <= 0) 
         {
-            ManagerBola.instancia.ResetBolas();
-            GameManager.instancia.juegoEmpezado = false;
             ManagerMuros.instancia.CargaSiguienteNivel();
         }
     }
@@ -106,9 +105,12 @@ public class GameManager : MonoBehaviour
             }
             else 
             {
+                UIManager.instancia.puntuacion -= UIManager.instancia.puntuacionResidual;
+                UIManager.instancia.puntuacionResidual = 0;
                 OnLiveLost?.Invoke(this.Vidas);
                 ManagerBola.instancia.ResetBolas();
                 juegoEmpezado = false;
+                ManagerMuros.instancia.LimpiarMurosRestantes();
                 ManagerMuros.instancia.CargarNivel(ManagerMuros.instancia.NivelActual);
             }
         }
@@ -121,6 +123,10 @@ public class GameManager : MonoBehaviour
 
     public void Victoria()
     {
+        foreach (var bola in ManagerBola.instancia.bolas.ToList())
+        {
+            Destroy(bola.gameObject);
+        }   
         this.textoFinal.text = "Victoria!";
         this.gameOverScreen.SetActive(true);
     }

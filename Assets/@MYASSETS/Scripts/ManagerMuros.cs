@@ -143,7 +143,6 @@ public class ManagerMuros : MonoBehaviour
     public void CargarNivel(int nivel)
     {
         this.NivelActual = nivel;
-        this.LimpiarMurosRestantes();
         this.GenerarMuros();
     }
 
@@ -151,7 +150,7 @@ public class ManagerMuros : MonoBehaviour
      * private void LimpiarMurosRestantes()
      * Elimina los muros restantes de la escena
      */
-    private void LimpiarMurosRestantes()
+    public void LimpiarMurosRestantes()
     {
         foreach (Muro muro in this.murosRestantes.ToList())
         {
@@ -169,6 +168,9 @@ public class ManagerMuros : MonoBehaviour
         }
         else
         {
+            ManagerBola.instancia.ResetBolas();
+            GameManager.instancia.juegoEmpezado = false;
+            this.LimpiarMurosRestantes();
             this.CargarNivel(this.NivelActual);
         }
     }

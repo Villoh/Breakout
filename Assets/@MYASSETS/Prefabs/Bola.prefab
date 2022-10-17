@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSound: {fileID: 6465489587453469210}
-  muro: {fileID: -7665381627485240226}
+  soundMuro: {fileID: -7665381627485240226}
 --- !u!82 &6465489587453469210
 AudioSource:
   m_ObjectHideFlags: 0
